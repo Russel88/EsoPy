@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python3 
 
 # Replace specific parts of a fasta file with X's to mask it in a BLAST (or BLAST-like) search
 # Arguments are positional
@@ -34,7 +34,7 @@ with open(outfile, 'w') as out_file:
 				Xto = max(int(getattr(row, '_2')), int(getattr(row, '_3')))
 				# New sequence
 				seq1 = seq[:int(Xfrom) - 1]
-				seqX = 'X'*(Xto-Xfrom+1)
+				seqX = 'N'*(Xto-Xfrom+1)
 				seq2 = seq[int(Xto):]
 				seq = seq1+seqX+seq2
 			fas.seq = Seq(seq)
