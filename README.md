@@ -28,3 +28,10 @@ Parse output from minced to get all spacers in a fasta, all repeats in a fasta, 
 ./minced_parser.py minced.out repeats
 ./minced_parser.py minced.out spacers
 ```
+
+## combine_alignments.py
+Concatenate a set of alignments to create for example a phylogenetic tree of core genes. If a genomes is lacking a gene it will be replaced with the gap '-' symbol
+```sh
+./combine_alignments.py genome_list alignment_dir
+```
+

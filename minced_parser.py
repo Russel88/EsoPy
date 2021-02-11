@@ -19,7 +19,8 @@ class CRISPR:
         self.repeats.append(repeat.rstrip())
     def addSpacer(self, spacer):
         self.spacers.append(spacer.rstrip())
-
+    def getConsensus(self):
+        self.cons = max(set(self.repeats), key = self.repeats.count) 
 
 # Read file line by line
 file = open(sys.argv[1], 'r')
@@ -46,9 +47,13 @@ for ll in file:
             crisp_tmp.addRepeat(lll[1])
     # Save the instance
     if ll.startswith('Repeats'):
+        crisp_tmp.getConsensus()
         crisprs.append(crisp_tmp)
 
+file.close()
+
 # Output
+# Fasta output
 def getSeq(what):
     for crisp in crisprs:
         n = 0
@@ -56,12 +61,30 @@ def getSeq(what):
             n += 1
             print('>' + crisp.crispr + '@' + crisp.sequence + '_' + str(n) + '\n' + sq)
 
+# Tab output
+def getSeqT(what):
+    for crisp in crisprs:
+        for sq in getattr(crisp, what):
+            print(crisp.crispr + '@' + crisp.sequence + '\t' + sq)
+
+# Tab output trimmed for flanking repeats
+def getSeqTT():
+    for crisp in crisprs:
+        for sq in crisp.repeats[1:len(crisp.repeats)-1]:
+            print(crisp.crispr + '@' + crisp.sequence + '\t' + sq)
+
 
 if sys.argv[2] == 'tab':
     for crisp in crisprs:
-        print(crisp.crispr + '\t' + crisp.sequence + '\t' + crisp.start + '\t' + crisp.end)
+        print(crisp.crispr + '\t' + crisp.sequence + '\t' + crisp.start + '\t' + crisp.end + '\t' + crisp.cons)
 if sys.argv[2] == 'repeats':
     getSeq('repeats')
 if sys.argv[2] == 'spacers':
     getSeq('spacers')
+if sys.argv[2] == 'trepeats':
+    getSeqT('repeats')
+if sys.argv[2] == 'tspacers':
+    getSeqT('spacers')
+if sys.argv[2] == 'ttrepeats':
+    getSeqTT()
 
